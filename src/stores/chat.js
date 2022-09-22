@@ -67,9 +67,7 @@ export const useChatStore = defineStore("chat", {
       return new Promise((resolve, reject) => {
         axios
           .get(
-            `${
-              import.meta.env.VITE_BASE_URL_BACKEND
-            }/v1/ticket/room/${payload}`,
+            `api/v1/ticket/room/${payload}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -89,9 +87,7 @@ export const useChatStore = defineStore("chat", {
       return new Promise((resolve, reject) => {
         axios
           .get(
-            `${
-              import.meta.env.VITE_BASE_URL_BACKEND
-            }/v1/ticket/room/guest/${payload}`
+            `api/v1/ticket/room/guest/${payload}`
           )
           .then((response) => {
             this.room = response.data.data;
@@ -160,9 +156,7 @@ export const useChatStore = defineStore("chat", {
       return new Promise((resolve, reject) => {
         axios
           .put(
-            `${
-              import.meta.env.VITE_BASE_URL_BACKEND
-            }/v1/ticket/room/guest/close/${payload}`
+            `api/v1/ticket/room/guest/close/${payload}`
           )
           .then((response) => {
             resolve(response.data);
@@ -177,9 +171,7 @@ export const useChatStore = defineStore("chat", {
       return new Promise((resolve, reject) => {
         axios
           .put(
-            `${
-              import.meta.env.VITE_BASE_URL_BACKEND
-            }/v1/ticket/room/close/${payload}`,
+            `api/v1/ticket/room/close/${payload}`,
             {},
             {
               headers: {
