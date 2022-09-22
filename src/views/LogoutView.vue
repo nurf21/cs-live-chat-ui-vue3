@@ -1,6 +1,6 @@
 <template>
   <div class="logout">
-    <h1>Logout Success</h1>
+    <h1>Success</h1>
     <nav>
       <RouterLink to="/">Back to home</RouterLink>
     </nav>

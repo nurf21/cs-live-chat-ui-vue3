@@ -9,7 +9,7 @@ defineProps({
 
 <template>
   <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
+    <h1 class="orange">{{ msg }}</h1>
     <h3>Start live chat with our customer service</h3>
   </div>
 </template>

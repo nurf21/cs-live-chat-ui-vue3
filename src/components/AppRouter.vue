@@ -4,25 +4,32 @@
     <RouterLink to="/chat">Chat Now</RouterLink>
   </nav>
   <nav v-if="token != null">
-    <RouterLink to="/logout" @click="onLogout">Logout</RouterLink>
+    <a @click="onLogout" style="cursor: pointer">Logout</a>
     <RouterLink to="/chat">Chat Now</RouterLink>
   </nav>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { useUserStore } from "../stores/user";
+import { ElMessageBox } from "element-plus";
 
 export default {
   name: "appRouter",
   computed: {
-    ...mapGetters(useUserStore, { token: "getToken" }),
+    ...mapState(useUserStore, { token: "getToken" }),
   },
   methods: {
     ...mapActions(useUserStore, ["logout"]),
     onLogout() {
-      this.logout();
-      this.$router.push("/logout");
+      ElMessageBox.confirm("Are you sure?", "Logout", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        type: "warning",
+      }).then(() => {
+        this.logout();
+        this.$router.push("/logout");
+      });
     },
   },
 };

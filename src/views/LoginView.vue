@@ -26,7 +26,7 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button plain class="login-btn green" @click="onSubmit"
+        <el-button plain class="login-btn orange" @click="onSubmit"
           >Login</el-button
         >
       </el-form-item>

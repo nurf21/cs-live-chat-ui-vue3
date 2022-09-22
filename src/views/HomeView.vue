@@ -16,7 +16,7 @@
 </style>
 
 <script>
-import { mapGetters, mapActions } from "pinia";
+import { mapState, mapActions } from "pinia";
 import { useUserStore } from "../stores/user";
 
 export default {
@@ -25,7 +25,7 @@ export default {
     ...mapActions(useUserStore, ["getUserData"]),
   },
   computed: {
-    ...mapGetters(useUserStore, { token: "getToken", user: "getUsername" }),
+    ...mapState(useUserStore, { token: "getToken", user: "getUsername" }),
   },
   created() {
     if (this.token != null) {

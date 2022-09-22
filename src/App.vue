@@ -1,13 +1,13 @@
 <script setup>
 import { RouterView } from "vue-router";
-import HelloWorld from "./components/HelloWorld.vue";
+import NymbiMain from "./components/NymbiMain.vue";
 import AppRouter from "./components/AppRouter.vue";
 </script>
 
 <template>
   <header>
     <img
-      alt="nymbi logo"
+      alt="NymbiMain logo"
       class="logo"
       src="@/assets/logo.png"
       width="125"
@@ -15,7 +15,7 @@ import AppRouter from "./components/AppRouter.vue";
     />
 
     <div class="wrapper">
-      <HelloWorld msg="nymbi Live Chat" />
+      <NymbiMain msg="nymbi Live Chat" />
 
       <AppRouter />
     </div>
