@@ -26,15 +26,11 @@ export const useChatStore = defineStore("chat", {
       const token = localStorage.getItem("token");
       return new Promise((resolve, reject) => {
         axios
-          .post(
-            `/api/v1/ticket/room`,
-            payload,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
+          .post(`/api/v1/ticket/room`, payload, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
           .then((response) => {
             this.roomId = response.data.data.room_id;
             localStorage.setItem("room", response.data.data.room_id);
@@ -48,10 +44,7 @@ export const useChatStore = defineStore("chat", {
     guestCreateTicketRoom(payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post(
-            `/api/v1/ticket/room/guest`,
-            payload
-          )
+          .post(`/api/v1/ticket/room/guest`, payload)
           .then((response) => {
             this.roomId = response.data.data.room_id;
             localStorage.setItem("room", response.data.data.room_id);
@@ -66,23 +59,16 @@ export const useChatStore = defineStore("chat", {
       const token = localStorage.getItem("token");
       return new Promise((resolve, reject) => {
         axios
-          .get(
-            `api/v1/ticket/room/${payload}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
+          .get(`/api/v1/ticket/room/${payload}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
           .then((response) => {
-            console.log("================================= SUCCESS ===============================")
-            console.log(response)
             this.room = response.data.data;
             resolve(response.data);
           })
           .catch((error) => {
-            console.log("================================= FAILED ===============================")
-            console.log(response)
             reject(error.response);
           });
       });
@@ -90,9 +76,7 @@ export const useChatStore = defineStore("chat", {
     guestGetRoomByRoomID(payload) {
       return new Promise((resolve, reject) => {
         axios
-          .get(
-            `api/v1/ticket/room/guest/${payload}`
-          )
+          .get(`/api/v1/ticket/room/guest/${payload}`)
           .then((response) => {
             this.room = response.data.data;
             resolve(response.data);
@@ -105,10 +89,7 @@ export const useChatStore = defineStore("chat", {
     guestSendMessageToRoom(payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post(
-            `/api/v1/ticket/message/guest`,
-            payload
-          )
+          .post(`/api/v1/ticket/message/guest`, payload)
           .then((response) => {
             resolve(response.data);
           })
@@ -121,15 +102,11 @@ export const useChatStore = defineStore("chat", {
       const token = localStorage.getItem("token");
       return new Promise((resolve, reject) => {
         axios
-          .post(
-            `/api/v1/ticket/message`,
-            payload,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
+          .post(`/api/v1/ticket/message`, payload, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
           .then((response) => {
             resolve(response.data);
           })
@@ -159,9 +136,7 @@ export const useChatStore = defineStore("chat", {
     guestCloseRoom(payload) {
       return new Promise((resolve, reject) => {
         axios
-          .put(
-            `api/v1/ticket/room/guest/close/${payload}`
-          )
+          .put(`/api/v1/ticket/room/guest/close/${payload}`)
           .then((response) => {
             resolve(response.data);
           })
@@ -175,7 +150,7 @@ export const useChatStore = defineStore("chat", {
       return new Promise((resolve, reject) => {
         axios
           .put(
-            `api/v1/ticket/room/close/${payload}`,
+            `/api/v1/ticket/room/close/${payload}`,
             {},
             {
               headers: {

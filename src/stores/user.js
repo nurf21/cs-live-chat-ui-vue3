@@ -12,17 +12,13 @@ export const useUserStore = defineStore("user", {
     login(payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post(
-            `/api/v1/auth/user`,
-            payload
-          )
+          .post(`/api/v1/auth/user`, payload)
           .then((response) => {
             localStorage.setItem("token", response.data.data.token);
             this.token = response.data.data.token;
             resolve(response.data);
           })
           .catch((error) => {
-            console.log(error)
             reject(error.response);
           });
       });
