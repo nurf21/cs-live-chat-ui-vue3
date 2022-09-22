@@ -13,7 +13,7 @@ export const useUserStore = defineStore("user", {
       return new Promise((resolve, reject) => {
         axios
           .post(
-            `${import.meta.env.VITE_BASE_URL_BACKEND}/v1/auth/user`,
+            `/api/v1/auth/user`,
             payload
           )
           .then((response) => {
@@ -39,7 +39,7 @@ export const useUserStore = defineStore("user", {
     getUserData() {
       return new Promise((resolve, reject) => {
         const instance = axios.create({
-          baseURL: `${import.meta.env.VITE_BASE_URL_BACKEND}/v1/`,
+          baseURL: `/api/v1/`,
           headers: { Authorization: "Bearer " + this.token },
         });
         instance
