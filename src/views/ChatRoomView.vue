@@ -246,7 +246,7 @@ export default {
   },
   mounted() {
     console.log("================================ params =============================")
-    console.log(this.route.params.id)
+    console.log(this.$route.params.id)
     this.getRoomByRoomID(this.$route.params.id)
       .then(() => {
         this.loading = false;
