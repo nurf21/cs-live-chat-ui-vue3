@@ -75,10 +75,14 @@ export const useChatStore = defineStore("chat", {
             }
           )
           .then((response) => {
+            console.log("================================= SUCCESS ===============================")
+            console.log(response)
             this.room = response.data.data;
             resolve(response.data);
           })
           .catch((error) => {
+            console.log("================================= FAILED ===============================")
+            console.log(response)
             reject(error.response);
           });
       });
