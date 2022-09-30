@@ -1,17 +1,36 @@
-<script setup>
-defineProps({
-  msg: {
-    type: String,
-    required: true,
+<script>
+import AppRouter from "./AppRouter.vue";
+
+export default {
+  components: {
+    AppRouter,
   },
-});
+};
 </script>
 
 <template>
-  <div class="greetings">
+  <header v-if="!this.$route.path.includes('admin')">
+    <img
+      alt="NymbiMain logo"
+      class="logo"
+      src="@/assets/logo.png"
+      width="125"
+      height="125"
+    />
+
+    <div class="wrapper">
+      <div class="greetings">
+        <h1 class="orange">nymbi Live Chat</h1>
+        <h3>Start live chat with our customer service</h3>
+      </div>
+
+      <AppRouter />
+    </div>
+  </header>
+  <!-- <div class="greetings">
     <h1 class="orange">{{ msg }}</h1>
     <h3>Start live chat with our customer service</h3>
-  </div>
+  </div> -->
 </template>
 
 <style scoped>
@@ -34,6 +53,72 @@ h3 {
   .greetings h1,
   .greetings h3 {
     text-align: left;
+  }
+}
+
+header {
+  line-height: 1.5;
+  max-height: 100vh;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto 2rem;
+}
+
+.button-group {
+  margin-top: 200px;
+}
+
+nav {
+  width: 100%;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+nav a.router-link-exact-active {
+  color: var(--color-text);
+}
+
+nav a.router-link-exact-active:hover {
+  background-color: transparent;
+}
+
+nav a {
+  display: inline-block;
+  padding: 0 1rem;
+  border-left: 1px solid var(--color-border);
+}
+
+nav a:first-of-type {
+  border: 0;
+}
+
+@media (min-width: 1024px) {
+  header {
+    display: flex;
+    place-items: center;
+    padding-right: calc(var(--section-gap) / 2);
+  }
+
+  .logo {
+    margin: 0 2rem 0 0;
+  }
+
+  header .wrapper {
+    display: flex;
+    place-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  nav {
+    text-align: left;
+    margin-left: -1rem;
+    font-size: 1rem;
+
+    padding: 1rem 0;
+    margin-top: 1rem;
   }
 }
 </style>

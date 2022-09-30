@@ -15,7 +15,7 @@ import { useUserStore } from "../stores/user";
 import { ElMessageBox } from "element-plus";
 
 export default {
-  name: "appRouter",
+  name: "app-router",
   computed: {
     ...mapState(useUserStore, { token: "getToken" }),
   },

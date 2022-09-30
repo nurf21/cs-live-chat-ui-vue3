@@ -12,7 +12,7 @@ export const useChatStore = defineStore("chat", {
     getTicketCategories() {
       return new Promise((resolve, reject) => {
         axios
-          .get(`/api/v1/ticket/category`)
+          .get(`${import.meta.env.VITE_BASE_URL_BACKEND}/v1/ticket/category`)
           .then((response) => {
             this.categoryOptions = response.data.data;
             resolve(response.data);
@@ -26,11 +26,15 @@ export const useChatStore = defineStore("chat", {
       const token = localStorage.getItem("token");
       return new Promise((resolve, reject) => {
         axios
-          .post(`/api/v1/ticket/room`, payload, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
+          .post(
+            `${import.meta.env.VITE_BASE_URL_BACKEND}/v1/ticket/room`,
+            payload,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
           .then((response) => {
             this.roomId = response.data.data.room_id;
             localStorage.setItem("room", response.data.data.room_id);
@@ -44,7 +48,10 @@ export const useChatStore = defineStore("chat", {
     guestCreateTicketRoom(payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post(`/api/v1/ticket/room/guest`, payload)
+          .post(
+            `${import.meta.env.VITE_BASE_URL_BACKEND}/v1/ticket/room/guest`,
+            payload
+          )
           .then((response) => {
             this.roomId = response.data.data.room_id;
             localStorage.setItem("room", response.data.data.room_id);
@@ -59,11 +66,16 @@ export const useChatStore = defineStore("chat", {
       const token = localStorage.getItem("token");
       return new Promise((resolve, reject) => {
         axios
-          .get(`/api/v1/ticket/room/${payload}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
+          .get(
+            `${
+              import.meta.env.VITE_BASE_URL_BACKEND
+            }/v1/ticket/room/${payload}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
           .then((response) => {
             this.room = response.data.data;
             resolve(response.data);
@@ -76,7 +88,11 @@ export const useChatStore = defineStore("chat", {
     guestGetRoomByRoomID(payload) {
       return new Promise((resolve, reject) => {
         axios
-          .get(`/api/v1/ticket/room/guest/${payload}`)
+          .get(
+            `${
+              import.meta.env.VITE_BASE_URL_BACKEND
+            }/v1/ticket/room/guest/${payload}`
+          )
           .then((response) => {
             this.room = response.data.data;
             resolve(response.data);
@@ -89,7 +105,10 @@ export const useChatStore = defineStore("chat", {
     guestSendMessageToRoom(payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post(`/api/v1/ticket/message/guest`, payload)
+          .post(
+            `${import.meta.env.VITE_BASE_URL_BACKEND}/v1/ticket/message/guest`,
+            payload
+          )
           .then((response) => {
             resolve(response.data);
           })
@@ -102,11 +121,15 @@ export const useChatStore = defineStore("chat", {
       const token = localStorage.getItem("token");
       return new Promise((resolve, reject) => {
         axios
-          .post(`/api/v1/ticket/message`, payload, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
+          .post(
+            `${import.meta.env.VITE_BASE_URL_BACKEND}/v1/ticket/message`,
+            payload,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
           .then((response) => {
             resolve(response.data);
           })
@@ -119,7 +142,7 @@ export const useChatStore = defineStore("chat", {
       const token = localStorage.getItem("token");
       return new Promise((resolve, reject) => {
         axios
-          .get(`/api/v1/ticket/room/list`, {
+          .get(`${import.meta.env.VITE_BASE_URL_BACKEND}/v1/ticket/room/list`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -136,7 +159,11 @@ export const useChatStore = defineStore("chat", {
     guestCloseRoom(payload) {
       return new Promise((resolve, reject) => {
         axios
-          .put(`/api/v1/ticket/room/guest/close/${payload}`)
+          .put(
+            `${
+              import.meta.env.VITE_BASE_URL_BACKEND
+            }/v1/ticket/room/guest/close/${payload}`
+          )
           .then((response) => {
             resolve(response.data);
           })
@@ -150,7 +177,9 @@ export const useChatStore = defineStore("chat", {
       return new Promise((resolve, reject) => {
         axios
           .put(
-            `/api/v1/ticket/room/close/${payload}`,
+            `${
+              import.meta.env.VITE_BASE_URL_BACKEND
+            }/v1/ticket/room/close/${payload}`,
             {},
             {
               headers: {

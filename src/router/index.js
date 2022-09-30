@@ -5,6 +5,11 @@ import LogoutView from "../views/LogoutView.vue";
 import GuestChatView from "../views/GuestChatView.vue";
 import RoomListView from "../views/RoomListView.vue";
 import ChatRoomView from "../views/ChatRoomView.vue";
+import AdminDefView from "../views/AdminDef.vue";
+import AdminLoginView from "../views/AdminLogin.vue";
+import AdminDashboardView from "../views/AdminDashboard.vue";
+import AdminSettingsView from "../views/AdminSettings.vue";
+import TicketCategoriesView from "../views/TicketCategories.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +43,31 @@ const router = createRouter({
       path: "/room/:id",
       name: "chat-room",
       component: ChatRoomView,
+    },
+    {
+      path: "/admin",
+      name: "admin-def",
+      component: AdminDefView,
+    },
+    {
+      path: "/admin/login",
+      name: "admin-login",
+      component: AdminLoginView,
+    },
+    {
+      path: "/admin/dashboard",
+      name: "admin-dashboard",
+      component: AdminDashboardView,
+    },
+    {
+      path: "/admin/settings",
+      name: "admin-settings",
+      component: AdminSettingsView,
+    },
+    {
+      path: "/admin/categories",
+      name: "admin-categories",
+      component: TicketCategoriesView,
     },
   ],
 });
