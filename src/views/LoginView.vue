@@ -35,8 +35,9 @@
 </template>
 
 <script>
-import { mapActions } from "pinia";
+import { mapState, mapActions } from "pinia";
 import { useUserStore } from "../stores/user";
+import { useSocketStore } from "../stores/socket-io";
 import { ElMessage } from "element-plus";
 
 export default {
@@ -49,7 +50,8 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useUserStore, ["login"]),
+    ...mapActions(useUserStore, ["login", "getUserData"]),
+    ...mapActions(useSocketStore, ["clientConnectAuthorized"]),
     onSubmit() {
       this.login(this.form)
         .then((response) => {
@@ -57,12 +59,18 @@ export default {
             message: response.message,
             type: "success",
           });
-          this.$router.push("/");
+          this.getUserData().then(() => {
+            this.clientConnectAuthorized(this.profile);
+            this.$router.push("/");
+          });
         })
         .catch((error) => {
           ElMessage.error(error.data.message);
         });
     },
+  },
+  computed: {
+    ...mapState(useUserStore, { profile: "getProfile" }),
   },
 };
 </script>

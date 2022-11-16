@@ -7,6 +7,20 @@
   </div>
 </template>
 
+<script>
+import { useSocketStore } from "../stores/socket-io";
+import { mapActions } from "pinia";
+
+export default {
+  methods: {
+    ...mapActions(useSocketStore, ["connectClientGuest"]),
+  },
+  mounted() {
+    this.connectClientGuest();
+  },
+};
+</script>
+
 <style>
 @media (min-width: 1024px) {
   .logout {

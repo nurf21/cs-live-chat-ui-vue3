@@ -201,6 +201,7 @@
 import { mapState, mapActions } from "pinia";
 import { useUserStore } from "../stores/user";
 import { useChatStore } from "../stores/chat";
+import { useSocketStore } from "../stores/socket-io";
 import { ElMessage, ElMessageBox } from "element-plus";
 import moment from "moment";
 
@@ -223,6 +224,7 @@ export default {
       "guestSendMessageToRoom",
       "guestCloseRoom",
     ]),
+    ...mapActions(useSocketStore, ["joinRoom", "leaveRoom"]),
     scrollToEnd() {
       const list = document.getElementById("chat-c");
       list.lastElementChild.scrollIntoView(true);
@@ -258,6 +260,7 @@ export default {
             window.setTimeout(() => {
               this.scrollToEnd();
             }, 10);
+            this.joinRoom(this.roomId);
           });
         })
         .catch((error) => {
@@ -303,6 +306,7 @@ export default {
             window.setTimeout(() => {
               this.scrollToEnd();
             }, 10);
+            this.leaveRoom(this.roomId);
           })
           .catch(() => {
             ElMessage.error("Unexpected error");
@@ -327,6 +331,7 @@ export default {
             window.setTimeout(() => {
               this.scrollToEnd();
             }, 10);
+            this.joinRoom(this.roomId);
           })
           .catch(() => {
             ElMessage.error("Unexpected error");

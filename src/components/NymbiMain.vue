@@ -1,9 +1,31 @@
 <script>
 import AppRouter from "./AppRouter.vue";
+import { useUserStore } from "../stores/user";
+import { useSocketStore } from "../stores/socket-io";
+import { mapActions, mapState } from "pinia";
 
 export default {
   components: {
     AppRouter,
+  },
+  methods: {
+    ...mapActions(useUserStore, ["getUserData"]),
+    ...mapActions(useSocketStore, [
+      "connectClientGuest",
+      "clientConnectAuthorized",
+    ]),
+  },
+  computed: {
+    ...mapState(useUserStore, { profile: "getProfile" }),
+  },
+  mounted() {
+    if (localStorage.getItem("token") == null) {
+      this.connectClientGuest();
+    } else {
+      this.getUserData().then(() => {
+        this.clientConnectAuthorized(this.profile);
+      });
+    }
   },
 };
 </script>

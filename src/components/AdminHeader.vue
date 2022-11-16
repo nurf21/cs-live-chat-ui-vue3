@@ -27,6 +27,7 @@
 <script>
 import { mapState, mapActions } from "pinia";
 import { useAdminStore } from "../stores/admin";
+import { useSocketStore } from "../stores/socket-io";
 import { ElMessageBox } from "element-plus";
 
 export default {
@@ -38,12 +39,14 @@ export default {
   },
   methods: {
     ...mapActions(useAdminStore, ["getAdminData", "logoutAdmin"]),
+    ...mapActions(useSocketStore, ["connectAdmin", "logoutSocketAdmin"]),
     onLogout() {
       ElMessageBox.confirm("Are you sure?", "Logout", {
         confirmButtonText: "OK",
         cancelButtonText: "Cancel",
         type: "warning",
       }).then(() => {
+        this.logoutSocketAdmin(this.profile);
         this.logoutAdmin();
         this.$router.push("/admin/login");
       });
@@ -55,11 +58,12 @@ export default {
       profile: "getAdminProfile",
     }),
   },
-  created() {
+  async mounted() {
     if (this.token != null) {
-      if (this.profile.username == undefined) {
+      if (this.profile.email == "") {
         this.getAdminData().then(() => {
           this.loadingHeader = false;
+          this.connectAdmin(this.profile);
         });
       } else {
         this.loadingHeader = false;

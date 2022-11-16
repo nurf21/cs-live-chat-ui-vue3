@@ -30,18 +30,11 @@
           <template #title>
             <el-icon><Ticket /></el-icon>Tickets
           </template>
-          <el-menu-item-group>
-            <template #title>Group 1</template>
-            <el-menu-item index="settings">Option 1</el-menu-item>
-            <el-menu-item index="2-2">Option 2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="Group 2">
-            <el-menu-item index="2-3">Option 3</el-menu-item>
-          </el-menu-item-group>
-          <el-sub-menu index="2-4">
-            <template #title>Option 4</template>
-            <el-menu-item index="2-4-1">Option 4-1</el-menu-item>
-          </el-sub-menu>
+          <el-menu-item index="ticket-open"
+            >Open<el-icon v-if="unread > 0" style="margin: 0 0 10px 5px"
+              ><el-badge :value="unread" /></el-icon
+          ></el-menu-item>
+          <el-menu-item index="ticket-closed">Closed</el-menu-item>
         </el-sub-menu>
         <el-menu-item index="settings">
           <template #title>
@@ -54,11 +47,26 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "pinia";
+import { useAdminStore } from "../stores/admin";
+
 export default {
+  name: "admin-menu",
   data() {
     return {
       isCollapse: true,
     };
+  },
+  methods: {
+    ...mapActions(useAdminStore, ["getUnreadTicketMessages"]),
+  },
+  computed: {
+    ...mapState(useAdminStore, {
+      unread: "getUnreadState",
+    }),
+  },
+  mounted() {
+    this.getUnreadTicketMessages();
   },
 };
 </script>

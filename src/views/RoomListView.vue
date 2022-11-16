@@ -17,12 +17,7 @@
       <el-main class="rooms-main">
         <el-row>
           <el-col :span="21">
-            <el-input
-              v-model="searchRoom"
-              class="w-50 m-2"
-              placeholder="Search"
-              size="large"
-            >
+            <el-input v-model="searchParam" class="w-50 m-2" placeholder="Search" size="large" v-on:keyup.enter="searchRoom">
               <template #prefix>
                 <el-icon class="el-input__icon"><search /></el-icon>
               </template>
@@ -68,7 +63,10 @@
           <div v-else v-for="(value, index) in rooms" :key="index">
             <el-card
               class="box-card"
-              @click="this.$router.push(`/room/${value.id}`)"
+              @click="
+                leaveRoomList();
+                this.$router.push(`/room/${value.id}`);
+              "
             >
               <el-row>
                 <el-col :span="22"
@@ -88,7 +86,7 @@
                 <el-col :span="24"
                   ><span>
                     {{
-                      value.messages[value.messages.length - 1].message
+                      value.last_message.message
                     }}</span
                   ></el-col
                 >
@@ -99,7 +97,7 @@
                   ><span style="font-size: 12px">
                     {{
                       formatTime(
-                        value.messages[value.messages.length - 1].created_at
+                        value.last_message.created_at
                       )
                     }}</span
                   ></el-col
@@ -151,6 +149,7 @@
 <script>
 import { mapState, mapActions } from "pinia";
 import { useChatStore } from "../stores/chat";
+import { useSocketStore } from "../stores/socket-io";
 import { ElMessage } from "element-plus";
 import moment from "moment";
 
@@ -162,7 +161,7 @@ export default {
       categoryForm: {},
       loadingCreateRoom: false,
       loadingRoomList: true,
-      searchRoom: "",
+      searchParam: "",
     };
   },
   computed: {
@@ -177,6 +176,7 @@ export default {
       "createTicketRoom",
       "getRoomsByToken",
     ]),
+    ...mapActions(useSocketStore, ["joinRoomList", "leaveRoomList"]),
     showCreateRoomForm() {
       this.loadingCreateRoom = true;
       this.dialogFormVisible = true;
@@ -184,10 +184,17 @@ export default {
         this.loadingCreateRoom = false;
       });
     },
+    searchRoom() {
+      this.loadingRoomList = true;
+      this.getRoomsByToken(this.searchParam).then(() => {
+      this.loadingRoomList = false;
+    });
+    },
     submitCategory() {
       this.loadingCreateRoom = true;
       this.createTicketRoom(this.categoryForm)
         .then((response) => {
+          this.leaveRoomList();
           this.$router.push(`/room/${response.data.room_id}`);
         })
         .catch(() => {
@@ -204,8 +211,9 @@ export default {
       this.showCreateRoomForm();
     }
 
-    this.getRoomsByToken().then(() => {
+    this.getRoomsByToken(this.searchParam).then(() => {
       this.loadingRoomList = false;
+      this.joinRoomList();
     });
   },
 };

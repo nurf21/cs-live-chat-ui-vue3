@@ -4,6 +4,7 @@ import axios from "axios";
 export const useUserStore = defineStore("user", {
   state: () => ({
     name: "",
+    profile: null,
     token: localStorage.getItem("token") || null,
   }),
   actions: {
@@ -41,6 +42,7 @@ export const useUserStore = defineStore("user", {
           .get(`/member/profile`)
           .then((response) => {
             this.name = response.data.data.username;
+            this.profile = response.data.data;
             resolve(response.data);
           })
           .catch((error) => {
@@ -52,5 +54,6 @@ export const useUserStore = defineStore("user", {
   getters: {
     getToken: (state) => state.token,
     getUsername: (state) => state.name,
+    getProfile: (state) => state.profile,
   },
 });

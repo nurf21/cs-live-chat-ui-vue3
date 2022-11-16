@@ -72,7 +72,7 @@
             <h2>Recent Ticket</h2>
           </el-col>
           <el-col :span="6">
-            <h2>Online Admin</h2>
+            <h2>Online Admin : {{ onlineCount.online_admins_count }}</h2>
           </el-col>
         </el-row>
         <el-row>
@@ -123,7 +123,7 @@
                         </el-col>
                       </el-row>
                       <el-divider />
-                      <el-row>
+                      <!-- <el-row>
                         <el-col :span="24"
                           ><span>
                             {{
@@ -131,14 +131,13 @@
                             }}</span
                           ></el-col
                         >
-                      </el-row>
+                      </el-row> -->
                       <el-row>
                         <el-col :span="22"
                           ><span style="font-size: 12px">
                             {{
                               formatTime(
-                                value.messages[value.messages.length - 1]
-                                  .created_at
+                                value.created_at
                               )
                             }}</span
                           ></el-col
@@ -156,27 +155,73 @@
 
           <el-col :span="12">
             <el-container>
-              <el-main class="rooms-main">
-                <div v-if="loadingRoomList" class="rooms-loading">
+              <el-main class="rooms-main" style="height: 33%">
+                <!-- <div v-if="loadingRoomList" class="rooms-loading">
                   <div class="lds-ring">
                     <div></div>
                     <div></div>
                     <div></div>
                     <div></div>
                   </div>
-                </div>
-                <div v-else>
+                </div> -->
+                <div
+                  v-for="(value, index) in onlineCount.online_admins"
+                  :key="index"
+                >
                   <el-row align="middle">
                     <el-col :span="2">
-                      <el-avatar
-                        :src="profile.admin_profile.profile_picture"
-                        :size="50"
+                      <el-avatar :src="value.profile_picture" :size="50"
                     /></el-col>
                     <el-col :span="22"
                       ><span>
-                        {{ profile.username }} ({{
-                          profile.admin_role.name
-                        }})</span
+                        {{ value.username }} ({{ value.role }})</span
+                      ></el-col
+                    >
+                  </el-row>
+                </div>
+              </el-main>
+            </el-container>
+
+            <el-row class="title-row" style="margin-top: 25px">
+              <el-col :span="12" style="margin-right: 20px">
+                <h2>Online Guests : {{ onlineCount.online_guests_count }}</h2>
+              </el-col>
+            </el-row>
+            <el-container>
+              <el-main class="rooms-main" style="height: 33%">
+                <div
+                  v-for="(value, index) in onlineCount.online_guests"
+                  :key="index"
+                >
+                  <el-row align="middle">
+                    <el-col :span="24"
+                      ><span>
+                        {{ value.ip_address }} ({{ value.channel }})</span
+                      ></el-col
+                    >
+                  </el-row>
+                </div>
+              </el-main>
+            </el-container>
+
+            <el-row class="title-row" style="margin-top: 25px">
+              <el-col :span="12" style="margin-right: 20px">
+                <h2>Online Users : {{ onlineCount.online_clients_count }}</h2>
+              </el-col>
+            </el-row>
+            <el-container>
+              <el-main class="rooms-main" style="height: 33%">
+                <div
+                  v-for="(value, index) in onlineCount.online_clients"
+                  :key="index"
+                >
+                  <el-row align="middle">
+                    <el-col :span="2">
+                      <el-avatar :src="value.profile_picture" :size="50"
+                    /></el-col>
+                    <el-col :span="22"
+                      ><span>
+                        {{ value.username }} ({{ value.email }})</span
                       ></el-col
                     >
                   </el-row>
@@ -193,6 +238,7 @@
 <script>
 import { mapState, mapActions } from "pinia";
 import { useAdminStore } from "../stores/admin";
+import { useSocketStore } from "../stores/socket-io";
 import AdminMenu from "../components/AdminMenu.vue";
 import AdminHeader from "../components/AdminHeader.vue";
 import moment from "moment";
@@ -216,32 +262,35 @@ export default {
       roomCount: "getRoomCount",
       recentRooms: "getRecentRooms",
       profile: "getAdminProfile",
+      onlineCount: "getOnlineCounter",
     }),
   },
   methods: {
     ...mapActions(useAdminStore, [
       "getTotalRoomCount",
       "getRecentTicketRooms",
+      "getOnlineCount",
       "getAdminData",
     ]),
-    refreshRoomCount() {
-      window.setInterval(() => {
-        this.getTotalRoomCount();
-      }, 60000);
-    },
+    ...mapActions(useSocketStore, ["refreshRoomCount", "refreshOnlineCount"]),
+    // refreshRoomCount() {
+    //   window.setInterval(() => {
+    //     this.getTotalRoomCount();
+    //   }, 60000);
+    // },
     formatTime(value) {
       return moment(value).format("YYYY-MM-DD hh:mm A");
     },
   },
   mounted() {
-    this.getAdminData().then(() => {
-      console.log(this.profile);
-    });
     if (this.token == null) {
       this.$router.push("/admin/login");
     }
+    this.getAdminData();
     this.getTotalRoomCount();
     this.refreshRoomCount();
+    this.getOnlineCount();
+    this.refreshOnlineCount();
     this.getRecentTicketRooms().then(() => {
       this.loadingRoomList = false;
     });

@@ -138,11 +138,11 @@ export const useChatStore = defineStore("chat", {
           });
       });
     },
-    getRoomsByToken() {
+    getRoomsByToken(search) {
       const token = localStorage.getItem("token");
       return new Promise((resolve, reject) => {
         axios
-          .get(`${import.meta.env.VITE_BASE_URL_BACKEND}/v1/ticket/room/list`, {
+          .get(`${import.meta.env.VITE_BASE_URL_BACKEND}/v1/ticket/room/list?search=${search}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },

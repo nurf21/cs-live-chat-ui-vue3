@@ -10,6 +10,8 @@ import AdminLoginView from "../views/AdminLogin.vue";
 import AdminDashboardView from "../views/AdminDashboard.vue";
 import AdminSettingsView from "../views/AdminSettings.vue";
 import TicketCategoriesView from "../views/TicketCategories.vue";
+import TicketsOpenView from "../views/TicketsOpen.vue";
+import TicketsClosedView from "../views/TicketsClosed.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -68,6 +70,16 @@ const router = createRouter({
       path: "/admin/categories",
       name: "admin-categories",
       component: TicketCategoriesView,
+    },
+    {
+      path: "/admin/ticket-open",
+      name: "admin-tickets-open",
+      component: TicketsOpenView,
+    },
+    {
+      path: "/admin/ticket-closed",
+      name: "admin-tickets-closed",
+      component: TicketsClosedView,
     },
   ],
 });

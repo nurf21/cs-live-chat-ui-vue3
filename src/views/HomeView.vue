@@ -18,19 +18,19 @@
 <script>
 import { mapState, mapActions } from "pinia";
 import { useUserStore } from "../stores/user";
+import { useSocketStore } from "../stores/socket-io";
 
 export default {
   name: "home-view",
   methods: {
     ...mapActions(useUserStore, ["getUserData"]),
+    ...mapActions(useSocketStore, ["leaveRoomList"]),
   },
   computed: {
-    ...mapState(useUserStore, { token: "getToken", user: "getUsername" }),
+    ...mapState(useUserStore, { user: "getUsername", profile: "getProfile" }),
   },
-  created() {
-    if (this.token != null) {
-      this.getUserData();
-    }
+  mounted() {
+    this.leaveRoomList();
   },
 };
 </script>
