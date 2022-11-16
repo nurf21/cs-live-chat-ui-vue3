@@ -34,7 +34,7 @@
                   <el-col :span="21"
                     ><span> {{ value.last_message.message }}</span></el-col
                   >
-                  <el-col :span="3"><el-badge :value="value.unread" /></el-col>
+                  <el-col :span="3" v-if="value.unread > 0"><el-badge :value="value.unread" /></el-col>
                 </el-row>
                 <el-row>
                   <el-col :span="22"
@@ -236,7 +236,7 @@ export default {
     AdminHeader,
   },
   methods: {
-    ...mapActions(useAdminStore, ["getOpenTicketRooms", "getTicketMessages"]),
+    ...mapActions(useAdminStore, ["getOpenTicketRooms", "getTicketMessages", "adminCloseRoom"]),
     formatTime(value) {
       return moment(value).format("YYYY-MM-DD hh:mm A");
     },
@@ -266,10 +266,10 @@ export default {
       ).then(() => {
         this.adminCloseRoom(this.room.id)
           .then(() => {
-            this.getTicketMessages(this.room.id);
-            window.setTimeout(() => {
-              this.scrollToEnd();
-            }, 10);
+            this.getOpenTicketRooms()
+            .then(() => {
+                this.roomSelected = false;
+              })
           })
           .catch(() => {
             ElMessage.error("Unexpected error");

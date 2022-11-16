@@ -7,6 +7,7 @@ export const useChatStore = defineStore("chat", {
     room: {},
     categoryOptions: [],
     rooms: [],
+    messages: [],
   }),
   actions: {
     getTicketCategories() {
@@ -95,6 +96,25 @@ export const useChatStore = defineStore("chat", {
           )
           .then((response) => {
             this.room = response.data.data;
+            resolve(response.data);
+          })
+          .catch((error) => {
+            reject(error.response);
+          });
+      });
+    },
+    getTicketMessages(payload) {
+      const token = localStorage.getItem("token");
+      return new Promise((resolve, reject) => {
+        axios
+          .get(
+            `${
+              import.meta.env.VITE_BASE_URL_BACKEND
+            }/v1/ticket/message/${payload}`,
+            { headers: { Authorization: "Bearer " + token } }
+          )
+          .then((response) => {
+            this.messages = response.data.data;
             resolve(response.data);
           })
           .catch((error) => {
@@ -206,5 +226,6 @@ export const useChatStore = defineStore("chat", {
     getRoom: (state) => state.room,
     getCategoryOptions: (state) => state.categoryOptions,
     getRooms: (state) => state.rooms,
+    getMessagesState: (state) => state.messages
   },
 });

@@ -61,7 +61,7 @@
         </el-header>
 
         <el-main class="chat-main" id="chat-c" ref="chatBox">
-          <el-row v-for="(value, index) in room.messages" :key="index">
+          <el-row v-for="(value, index) in messages" :key="index">
             <el-col
               :span="24"
               v-if="value.sender_type == 'admin'"
@@ -189,6 +189,7 @@ export default {
     ...mapActions(useChatStore, [
       "getRoomByRoomID",
       "closeRoom",
+      "getTicketMessages",
       "sendMessageToRoom",
     ]),
     ...mapActions(useSocketStore, ["joinRoom", "leaveRoom"]),
@@ -230,8 +231,8 @@ export default {
         this.messageForm.room_id = this.room.id;
         this.sendMessageToRoom(this.messageForm)
           .then(() => {
-            this.room.messages.push({
-              sender_type: "guest",
+            this.messages.push({
+              sender_type: "user",
               message: this.messageForm.message,
             });
             this.messageForm.message = "";
@@ -248,17 +249,20 @@ export default {
   computed: {
     ...mapState(useChatStore, {
       room: "getRoom",
+      messages: "getMessagesState"
     }),
   },
   mounted() {
     this.getRoomByRoomID(this.$route.params.id)
       .then(() => {
-        this.loading = false;
-        window.setTimeout(() => {
-          this.scrollToEnd();
-        }, 10);
-        console.log(this.room.id);
-        this.joinRoom(this.room.id);
+        this.getTicketMessages(this.room.id)
+        .then(() => {
+          this.loading = false;
+          window.setTimeout(() => {
+              this.scrollToEnd();
+            }, 10);
+            this.joinRoom(this.room.id);
+        })
       })
       .catch(() => {
         ElMessage.error("Unexpected error");

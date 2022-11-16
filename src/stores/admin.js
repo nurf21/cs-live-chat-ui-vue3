@@ -349,7 +349,7 @@ export const useAdminStore = defineStore("admin", {
           .put(
             `${
               import.meta.env.VITE_BASE_URL_BACKEND
-            }/v1/ticket/room/admin/close/${payload}`,
+            }/v1/ticket/room/admin/close/${payload}`, {},
             { headers: { Authorization: "Bearer " + this.token } }
           )
           .then((response) => {
